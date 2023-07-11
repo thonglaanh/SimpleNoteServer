@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken')
 class userController {
     get(req, res, next) {
         userSchema.find({}).then((data) => {
-            console.log(data + req.cookies.token);
+            // console.log(data + req.cookies.token);
             return res.status(200).json({ status: 'success', data });
         })
     }
