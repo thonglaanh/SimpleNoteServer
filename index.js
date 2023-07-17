@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const db = require('./db/index')
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
+app.use('/uploads', express.static('uploads'))
 
 
 app.use(bodyParser.urlencoded({ extended: false }))

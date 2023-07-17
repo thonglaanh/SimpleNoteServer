@@ -6,8 +6,8 @@ const noteSchema = new Schema({
     content: String,
     img: String,
     color: String,
-    startDate: String,
-    endDate: String,
+    startDate: Date,
+    endDate: Date,
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'users',

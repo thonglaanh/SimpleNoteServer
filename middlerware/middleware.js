@@ -9,8 +9,7 @@ const middleware = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-        console.log('hahaha');
-        req.user = decoded; // Lưu thông tin người  dùng đã xác thực vào đối tượng req
+        console.log(decoded);
         next();
     } catch (error) {
         if (error.name === 'TokenExpiredError') {
@@ -38,7 +37,7 @@ const refreshToken = (req, res, next) => {
 };
 
 function generateAccessToken(data) {
-    return jwt.sign(data, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s' });
+    return jwt.sign(data, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10m' });
 }
 
 module.exports = middleware;
