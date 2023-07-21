@@ -13,6 +13,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 db.connect();
 
+
 route(app);//Phải đặt cuối gần listen
 app.listen(process.env.PORT, () => {
     console.log('Server started on http://localhost:' + process.env.PORT);

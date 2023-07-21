@@ -6,6 +6,8 @@ router.post('/login', controller.login)
 router.get('/logout', controller.logout)
 router.post('/register', controller.register)
 router.get('/', middleware, controller.get)
+router.post('/changePass', middleware, controller.changePass);
+router.post('/changeProfile/:_id', middleware, controller.changeProfile);
 
 
 

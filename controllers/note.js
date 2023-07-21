@@ -34,7 +34,7 @@ class NoteController {
             }
 
             // Lấy danh sách note của người dùng
-            noteData = await Note.find(noteQuery)
+            noteData = await Note.find(noteQuery).sort({ 'startDate': -1 })
                 .populate('user')
                 .populate('category');
             res.json({ notes: noteData, categories: categoryData, account: account });
@@ -48,14 +48,14 @@ class NoteController {
     }
     createNote(req, res, next) {
         console.log(req.body);
-        fs.rename(req.file.path, 'uploads/' + req.file.originalname, function (err) {
-            console.log(req.file.originalname);
-        });
         const formData = req.body;
         if (req.file) {
-            formData.img = 'http://localhost:3000/uploads/' + req.file.originalname;
+            fs.rename(req.file.path, 'uploads/' + req.file.originalname, function (err) {
+                console.log(req.file.originalname);
+            });
+            formData.img = 'http://192.168.0.107:3000/uploads/' + req.file.originalname;
         } else {
-            res.json('Không có ảnh')
+            console.log('Không có ảnh')
         }
 
 
@@ -64,26 +64,26 @@ class NoteController {
         formData.startDate = currentDate;
         formData.user = account._id;
         console.log(formData);
-
         Note.create(formData).then(() => {
 
-            res.json('Tạo thành công')
+            console.log('Tạo thành công')
         }).catch((err) => {
-            res.json('Tạo thất bại ' + err)
+            console.log('Tạo thất bại ' + err)
         })
 
     }
     updateNote(req, res, next) {
 
         console.log(req.body);
-        fs.rename(req.file.path, 'uploads/' + req.file.originalname, function (err) {
-            console.log(req.file.originalname);
-        });
+
         const formData = req.body;
         if (req.file) {
-            formData.img = 'http://localhost:3000/uploads/' + req.file.originalname;
+            fs.rename(req.file.path, 'uploads/' + req.file.originalname, function (err) {
+                console.log(req.file.originalname);
+            });
+            formData.img = 'http://192.168.0.107:3000/uploads/' + req.file.originalname;
         } else {
-            res.json('Không có ảnh')
+            console.log('Không có ảnh');
         }
 
         const id = req.params._id;

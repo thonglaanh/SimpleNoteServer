@@ -1,11 +1,11 @@
 
-const userSchema = require('../models/user')
+const User = require('../models/user')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
 class userController {
     get(req, res, next) {
-        userSchema.find({}).then((data) => {
+        User.find({}).then((data) => {
             console.log(data + req.cookies.token);
             return res.status(200).json({ status: 'success', data });
         })
@@ -14,9 +14,7 @@ class userController {
         console.log(req.body);
         var email = req.body.email;
         var password = req.body.password;
-
-
-        userSchema.findOne({ email: email })
+        User.findOne({ email: email })
             .then((data) => {
                 if (!data) {
                     return res.status(401).json({ status: 'error', message: 'Tài khoản chưa tồn tại' });
@@ -58,7 +56,7 @@ class userController {
         var email = req.body.email;
         var password = req.body.password;
 
-        userSchema.findOne({ email: email })
+        User.findOne({ email: email })
             .then((data) => {
                 if (data) {
                     res.status(400).json('Email đã tồn tại!');
@@ -99,6 +97,43 @@ class userController {
         res.clearCookie('accessToken');
         res.clearCookie('refreshToken');
         res.send('Cookie has been cleared');
+    }
+    changePass(req, res, next) {
+        const id = req.cookies.user._id;
+        const oldPass = req.body.oldPass;
+        const newPass = req.body.newPass;
+
+        User.findOne({ _id: id }).then((data) => {
+            if (!data) {
+                return res.status(500).json('Không tìm thấy tài khoản')
+            }
+            bcrypt.compare(oldPass, data.password).then(isMatch => {
+                if (isMatch) {
+                    bcrypt.genSalt(10)
+                        .then(salt => {
+                            return bcrypt.hash(newPass, salt);
+                        }).then(hash => {
+                            data.password = hash;
+                            data.save().then(() => {
+                                res.status(200).json('Success')
+                            }).catch((err) => {
+                                res.status(404).json('Error ' + err);
+                            })
+                        })
+                } else {
+                    return res.status(500).json('Mật khẩu không chính xác!')
+                }
+
+            })
+
+        }).catch((err) => {
+            return res.status(500).json('Error ' + err)
+        })
+
+
+    }
+    changeProfile(req, res, next) {
+
     }
 
 }
