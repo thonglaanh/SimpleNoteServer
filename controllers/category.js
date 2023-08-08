@@ -1,7 +1,7 @@
 const categorySchema = require('../models/category')
 class categoryController {
     get(req, res, next) {
-        categorySchema.find({}).populate('user').//trỏ đến key thôi nha
+        categorySchema.find({}).//trỏ đến key thôi nha
             then((data) => {
                 res.json(data)
             })

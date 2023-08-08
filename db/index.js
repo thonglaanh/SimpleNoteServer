@@ -4,7 +4,7 @@ async function connect() {
         await mongooes.connect('mongodb://127.0.0.1:27017/projectNote');
         console.log('Connect mongodb success')
     } catch (error) {
-        console.log('Connect mongodb failer')
+        console.log('Connect mongodb failed')
     }
 }
 module.exports = { connect };

@@ -6,12 +6,7 @@ const noteSchema = new Schema({
     content: String,
     img: String,
     color: String,
-    startDate: Date,
     endDate: Date,
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
-    },
     category: { type: mongoose.Schema.Types.ObjectId, ref: 'categories' },
 },
     {
@@ -19,6 +14,5 @@ const noteSchema = new Schema({
         timestamps: true
 
     });
-
 const NoteModel = mongoose.model('notes', noteSchema);
 module.exports = NoteModel;

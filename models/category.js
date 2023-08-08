@@ -4,8 +4,6 @@ const Schema = mongoose.Schema;
 const categorySchema = new Schema({
     name: String,
     color: String,
-    img: String,
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
 },
     {
         collection: 'categories',

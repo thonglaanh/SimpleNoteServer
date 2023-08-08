@@ -9,11 +9,9 @@ class NoteController {
             const titleQuery = req.query.title;
             let categoryData;
             let noteData;
-            const account = req.cookies.user;
-            console.log(account._id);
 
             // Lấy danh sách category
-            const categories = await Category.find({ user: account });
+            const categories = await Category.find({});
             categoryData = categories.map((category) => category.toObject());
 
             // Tạo câu truy vấn cho note
@@ -29,16 +27,8 @@ class NoteController {
             if (titleQuery) {
                 noteQuery.title = { $regex: titleQuery, $options: 'i' };
             }
-            if (account) {
-                noteQuery.user = account;
-            }
-
-            // Lấy danh sách note của người dùng
-            noteData = await Note.find(noteQuery).sort({ 'startDate': -1 })
-                .populate('user')
-                .populate('category');
-            res.json({ notes: noteData, categories: categoryData, account: account });
-            // return res.status(200).json({ status: 'success', data: { note: noteData, category: categoryData } });
+            noteData = await Note.find(noteQuery).sort({ 'startDate': -1 }).populate('category');
+            res.json({ notes: noteData, categories: categoryData });
 
 
         } catch (error) {
@@ -57,23 +47,16 @@ class NoteController {
         } else {
             console.log('Không có ảnh')
         }
-
-
-        const currentDate = new Date();
-        const account = req.cookies.user;
-        formData.startDate = currentDate;
-        formData.user = account._id;
         console.log(formData);
         Note.create(formData).then(() => {
 
-            console.log('Tạo thành công')
+            return res.json('Success')
         }).catch((err) => {
-            console.log('Tạo thất bại ' + err)
+            return res.json('Error')
         })
 
     }
     updateNote(req, res, next) {
-
         console.log(req.body);
 
         const formData = req.body;
@@ -88,9 +71,7 @@ class NoteController {
 
         const id = req.params._id;
         const currentDate = new Date();
-        const account = req.cookies.user;
         formData.startDate = currentDate;
-        formData.user = account._id;
         console.log(formData);
 
         Note.findByIdAndUpdate(id, formData).then(() => {
