@@ -8,7 +8,7 @@ class NoteController {
             const categoryQuery = req.query.category;
             const titleQuery = req.query.title;
             let categoryData;
-            let noteData;
+            let noteData, lengthNote;
 
             // Lấy danh sách category
             const categories = await Category.find({});
@@ -27,8 +27,9 @@ class NoteController {
             if (titleQuery) {
                 noteQuery.title = { $regex: titleQuery, $options: 'i' };
             }
+            lengthNote = (await Note.find({})).length;
             noteData = await Note.find(noteQuery).sort({ 'startDate': -1 }).populate('category');
-            res.json({ notes: noteData, categories: categoryData });
+            res.json({ notes: noteData, categories: categoryData, lengthNote: lengthNote });
 
 
         } catch (error) {

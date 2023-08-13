@@ -4,14 +4,14 @@ const app = express();
 const route = require('./routes');
 const bodyParser = require('body-parser');
 const db = require('./db/index')
-const cookieParser = require('cookie-parser');
-app.use(cookieParser());
+app.use(express.json());
 app.use('/uploads', express.static('uploads'))
 
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
 db.connect();
+
 
 
 route(app);//Phải đặt cuối gần listen
